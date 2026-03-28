@@ -1,4 +1,3 @@
-"""Alternatif giriş noktası — uygulama tanımı health_ai.py içinde."""
 from health_ai import app
 
 if __name__ == "__main__":
