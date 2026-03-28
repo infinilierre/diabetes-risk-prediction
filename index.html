@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
+        <h1 class="text-3xl font-bold mb-2 text-blue-400">🩺 Diabetes Risk Predictor</h1>
+        <p class="text-slate-400 mb-8">Clinical Diabetes Risk Analyzer</p>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Glucose Level (mg/dL)</label>
+                <input type="number" id="glucose" value="120" class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">BMI Index</label>
+                <input type="number" id="bmi" value="25" step="0.1" class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Age</label>
+                <input type="number" id="age" value="30" class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button onclick="analyze()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-900/20">Analyze Risk</button>
+        </div>
+
+        <div id="resultBox" class="mt-8 p-4 rounded-xl hidden border border-opacity-20">
+            <p id="resultText" class="text-center font-bold text-xl"></p>
+            <p id="scoreText" class="text-center text-sm opacity-80 mt-1"></p>
+        </div>
+    </div>
+
+    <script>
+        async function analyze() {
+            const box = document.getElementById('resultBox');
+            const text = document.getElementById('resultText');
+            const score = document.getElementById('scoreText');
+
+            const data = {
+                glucose: parseFloat(document.getElementById('glucose').value),
+                bmi: parseFloat(document.getElementById('bmi').value),
+                age: parseInt(document.getElementById('age').value, 10)
+            };
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                box.classList.remove('hidden');
+                if (result.status === 'error') {
+                    box.className = 'mt-8 p-4 rounded-xl border border-amber-500 bg-amber-500/10';
+                    text.innerText = 'Hata: ' + (result.message || 'Bilinmeyen hata');
+                    text.className = 'text-center font-bold text-xl text-amber-400';
+                    score.innerText = '';
+                    return;
+                }
+                if (result.risk_score > 50) {
+                    box.className = 'mt-8 p-4 rounded-xl border border-red-500 bg-red-500/10';
+                    text.innerText = '⚠️ ' + result.interpretation;
+                    text.className = 'text-center font-bold text-xl text-red-400';
+                } else {
+                    box.className = 'mt-8 p-4 rounded-xl border border-green-500 bg-green-500/10';
+                    text.innerText = '✅ ' + result.interpretation;
+                    text.className = 'text-center font-bold text-xl text-green-400';
+                }
+                score.innerText = 'Calculated Risk Score: %' + result.risk_score;
+            } catch (e) {
+                box.classList.remove('hidden');
+                box.className = 'mt-8 p-4 rounded-xl border border-amber-500 bg-amber-500/10';
+                text.innerText = 'Sunucuya bağlanılamadı. Önce terminalde: python health_ai.py';
+                text.className = 'text-center font-bold text-sm text-amber-400';
+                score.innerText = String(e);
+            }
+        }
+    </script>
+</body>
+</html>
