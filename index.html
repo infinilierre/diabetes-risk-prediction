@@ -10,7 +10,7 @@
     <div class="max-w-md w-full bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
         <h1 class="text-3xl font-bold mb-2 text-blue-400">🩺 Diabetes Risk Predictor</h1>
         <p class="text-slate-400 mb-8">Clinical Diabetes Risk Analyzer</p>
-        
+
         <div class="space-y-4">
             <div>
                 <label class="block text-sm font-medium mb-1">Glucose Level (mg/dL)</label>
@@ -34,6 +34,22 @@
     </div>
 
     <script>
+        /** Cursor / Live Preview başka portta açıldığında /predict yanlış sunucuya gider; Flask'a tam URL kullan. */
+        function getApiBase() {
+            const fromQuery = new URLSearchParams(window.location.search).get('api');
+            if (fromQuery) return fromQuery.replace(/\/$/, '');
+            try {
+                const s = localStorage.getItem('apiBase');
+                if (s) return s.replace(/\/$/, '');
+            } catch (_) {}
+            const { protocol, hostname, port } = window.location;
+            if (protocol === 'file:') return 'http://127.0.0.1:5000';
+            const local = hostname === 'localhost' || hostname === '127.0.0.1';
+            if (local && (port === '5000' || port === '10000')) return '';
+            if (!local) return '';
+            return 'http://127.0.0.1:5000';
+        }
+
         async function analyze() {
             const box = document.getElementById('resultBox');
             const text = document.getElementById('resultText');
@@ -45,8 +61,10 @@
                 age: parseInt(document.getElementById('age').value, 10)
             };
 
+            const predictUrl = `${getApiBase()}/predict`;
+
             try {
-                const response = await fetch('/predict', {
+                const response = await fetch(predictUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -74,7 +92,7 @@
             } catch (e) {
                 box.classList.remove('hidden');
                 box.className = 'mt-8 p-4 rounded-xl border border-amber-500 bg-amber-500/10';
-                text.innerText = 'Sunucuya bağlanılamadı. Önce terminalde: python health_ai.py';
+                text.innerText = 'API yok. Terminalde sunucuyu açın (python health_ai.py, port 5000). Render için: ?api=https://senin-adresin';
                 text.className = 'text-center font-bold text-sm text-amber-400';
                 score.innerText = String(e);
             }
