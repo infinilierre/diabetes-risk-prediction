@@ -3,113 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Risk Analyzer | Nordic Minimal</title>
+    <title>Clinical Predictor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; }
-        .gender-btn.active { background-color: #0f172a; color: white; border-color: #0f172a; }
     </style>
 </head>
 <body class="bg-white text-slate-900 min-h-screen flex items-center justify-center p-6">
-
-    <div class="max-w-md w-full bg-white rounded-none p-10 border border-slate-100 relative overflow-hidden shadow-sm">
+    <div class="max-w-md w-full bg-white p-8 border border-slate-100 shadow-sm relative">
         
-        <div class="text-center mb-8">
-            <div class="inline-flex p-4 bg-slate-50 rounded-full mb-4 text-slate-600 border border-slate-100 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4.8 2.8C3.5 2.8 2.5 3.8 2.5 5v3c0 4.1 3.4 7.5 7.5 7.5s7.5-3.4 7.5-7.5V5c0-1.2-1-2.2-2.2-2.2"></path>
-                    <path d="M10 15.5v4"></path><path d="M8 21.5h4"></path>
-                    <circle cx="17.5" cy="18.5" r="3"></circle><path d="M20.5 18.5h1"></path>
-                </svg>
-            </div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-950 uppercase">Diabetes <span class="font-light text-slate-600">Risk Analyzer</span></h1>
+        <div class="text-center mb-10 mt-4">
+            <h1 class="text-2xl font-bold tracking-tighter uppercase italic">
+                <span>Clinical</span> 
+                <span class="font-light text-slate-500 italic">Analysis</span>
+            </h1>
+            <div class="h-1 w-12 bg-slate-950 mx-auto mt-2"></div>
         </div>
 
-        <div class="space-y-5 relative text-center">
-            <div class="flex gap-2 mb-6">
-                <button onclick="setGender('female')" id="btnFemale" class="gender-btn active flex-1 py-3 border border-slate-200 text-[11px] font-bold uppercase tracking-widest transition-all">Female</button>
-                <button onclick="setGender('male')" id="btnMale" class="gender-btn flex-1 py-3 border border-slate-200 text-[11px] font-bold uppercase tracking-widest transition-all">Male</button>
-            </div>
-
+        <div class="space-y-6">
             <div>
-                <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-2">Glucose Level (mg/dL)</label>
-                <input type="number" id="glucose" value="115" class="w-full bg-slate-50 border border-slate-100 rounded-none p-4 outline-none focus:border-slate-950 transition-all text-center text-lg shadow-inner">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Glucose Level (mg/dL)</label>
+                <input type="number" id="glucose" value="100" class="w-full bg-slate-50 border border-slate-100 p-4 text-center text-xl outline-none focus:border-slate-950">
             </div>
-            
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-2">Weight (kg)</label>
-                    <input type="number" id="weight" value="65" class="w-full bg-slate-50 border border-slate-100 rounded-none p-4 outline-none focus:border-slate-950 transition-all text-center text-lg shadow-inner">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Weight (kg)</label>
+                    <input type="number" id="weight" value="100" class="w-full bg-slate-50 border border-slate-100 p-4 text-center text-xl outline-none focus:border-slate-950">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-2">Height (cm)</label>
-                    <input type="number" id="height" value="168" class="w-full bg-slate-50 border border-slate-100 rounded-none p-4 outline-none focus:border-slate-950 transition-all text-center text-lg shadow-inner">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Height (cm)</label>
+                    <input type="number" id="height" value="175" class="w-full bg-slate-50 border border-slate-100 p-4 text-center text-xl outline-none focus:border-slate-950">
                 </div>
             </div>
-
             <div>
-                <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-2">Subject Age</label>
-                <input type="number" id="age" value="28" class="w-full bg-slate-50 border border-slate-100 rounded-none p-4 outline-none focus:border-slate-950 transition-all text-center text-lg shadow-inner">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Subject Age</label>
+                <input type="number" id="age" value="24" class="w-full bg-slate-50 border border-slate-100 p-4 text-center text-xl outline-none focus:border-slate-950">
             </div>
-
-            <button onclick="analyzeRisk()" id="btnAction" class="w-full bg-slate-950 hover:bg-slate-800 text-white py-5 rounded-none font-semibold text-xs uppercase tracking-[0.2em] transition-all shadow-md active:scale-[0.98] mt-2">
-                Analyze Risk
+            <button onclick="runInference()" id="btnAction" class="w-full bg-slate-950 text-white py-5 font-bold text-[11px] uppercase tracking-[0.3em] hover:bg-slate-800 transition-all active:scale-95">
+                Run Clinical Inference
             </button>
         </div>
 
-        <div id="resultBox" class="mt-8 p-7 rounded-none hidden border border-slate-100 bg-white shadow-inner text-center">
-            <p id="bmiDisplay" class="text-[9px] font-bold text-slate-400 uppercase mb-2"></p>
-            <p id="resultText" class="font-bold text-xl text-slate-950"></p>
-            <p id="scoreTag" class="text-[10px] font-medium mt-2 text-slate-500 uppercase tracking-widest"></p>
+        <div id="resultBox" class="mt-10 p-6 hidden border border-slate-100 bg-slate-50 text-center">
+            <p id="bmiDisplay" class="text-[10px] font-bold text-slate-400 uppercase mb-2"></p>
+            <div class="flex items-center justify-center gap-2">
+                <p id="resultText" class="font-bold text-2xl text-slate-950"></p>
+                <span id="riskDot" class="h-3 w-3 rounded-full"></span>
+            </div>
+            <p class="text-[11px] text-slate-500 italic leading-relaxed pt-4 border-t border-slate-200 mt-4 px-2">Analysis complete.</p>
         </div>
     </div>
 
     <script>
-        let selectedGender = 'female';
         const API_URL = "https://diabetes-risk-prediction-dpgj.onrender.com/predict";
 
-        function setGender(gender) {
-            selectedGender = gender;
-            document.getElementById('btnFemale').classList.toggle('active', gender === 'female');
-            document.getElementById('btnMale').classList.toggle('active', gender === 'male');
-        }
-
-        async function analyzeRisk() {
-            const box = document.getElementById('resultBox');
+        async function runInference() {
             const btn = document.getElementById('btnAction');
-            const weight = parseFloat(document.getElementById('weight').value);
-            const heightM = parseFloat(document.getElementById('height').value) / 100;
-            const calculatedBMI = (weight / (heightM * heightM)).toFixed(1);
+            const box = document.getElementById('resultBox');
+            
+            const gVal = parseFloat(document.getElementById('glucose').value);
+            const wVal = parseFloat(document.getElementById('weight').value);
+            const hVal = parseFloat(document.getElementById('height').value);
+            const aVal = parseInt(document.getElementById('age').value);
 
-            btn.disabled = true;
-            btn.innerText = "Analyzing...";
+            if (isNaN(gVal) || gVal < 20 || gVal > 500 || hVal < 50 || hVal > 250 || wVal < 10 || wVal > 300 || aVal < 1 || aVal > 120) {
+                alert("Please enter realistic medical values:\n- Glucose: 20-500 mg/dL\n- Height: 50-250 cm\n- Weight: 10-300 kg\n- Age: 1-120 years");
+                return;
+            }
+
+            const bmi = (wVal / ((hVal/100) * (hVal/100))).toFixed(1);
+            btn.innerText = "...";
 
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        glucose: parseFloat(document.getElementById('glucose').value),
-                        bmi: parseFloat(calculatedBMI),
-                        age: parseInt(document.getElementById('age').value, 10),
-                        gender: selectedGender
-                    })
+                    body: JSON.stringify({ glucose: gVal, bmi: parseFloat(bmi), age: aVal })
                 });
-
                 const data = await response.json();
                 box.classList.remove('hidden');
-                
-                // Gender ve BMI burada yazılıyor:
-                document.getElementById('bmiDisplay').innerText = `BMI: ${calculatedBMI} | Gender: ${selectedGender.toUpperCase()}`;
-                document.getElementById('resultText').innerText = data.risk_score > 50 ? "Condition: High Risk" : "Condition: Low Risk";
-                document.getElementById('scoreTag').innerText = `Confidence Score: ${(100 - data.risk_score).toFixed(1)}%`;
+                document.getElementById('bmiDisplay').innerText = `Computed BMI: ${bmi}`;
+                document.getElementById('resultText').innerText = `${data.risk_score}% Risk Score`;
+                document.getElementById('riskDot').style.backgroundColor = data.risk_score > 40 ? "#ef4444" : "#22c55e";
             } catch (err) {
-                box.classList.remove('hidden');
-                document.getElementById('resultText').innerText = "Network Error.";
+                alert("Cloud connection error.");
             } finally {
-                btn.disabled = false;
-                btn.innerText = "Analyze Risk";
+                btn.innerText = "Run Clinical Inference";
             }
         }
     </script>
