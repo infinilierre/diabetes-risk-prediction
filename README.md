@@ -19,8 +19,12 @@ The model is inspired by the **FINDRISC** (Finnish Diabetes Risk Score) framewor
 ## 📊 Key Insights: Feature Importance
 The generated visualization (Bar Chart) identifies **BMI** as the most influential factor in the prediction. This validates the clinical hypothesis that lifestyle factors like weight are the most important predictors in early screening.
 
-## 🛠️ Installation & Usage
-1. Clone or download the project.
+# 🛠️ Installation & Usage
+1. Clone the repository:
+   git clone https://github.com/infinilierre/diabetes-risk-predictor.git
+
 2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt 
+   pip install -r requirements.txt
+
+3. Run the simulation:
+   python main.py
