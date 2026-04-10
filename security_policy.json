@@ -1,0 +1,10 @@
+{
+    "PolicyName": "StrictMLOpsAccess",
+    "Description": "Ensures only authorized services can access the Diabetes Model",
+    "AccessControl": {
+        "AllowRoot": false,
+        "EncryptedDataOnly": true,
+        "EnforcemTLS": true
+    }
+}
+
