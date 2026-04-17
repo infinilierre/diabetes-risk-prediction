@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: diabetes-service
 spec:
-  type: LoadBalancer # Dışarıdan erişim sağlamak için
+  type: LoadBalancer 
   selector:
     app: diabetes-prediction
   ports:
